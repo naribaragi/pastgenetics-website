@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight, ChevronDown, X, ArrowLeft } from "lucide-react";
+import { ChevronRight, ChevronDown, X, ArrowLeft, Grid3x3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -64,6 +64,14 @@ const categoriesData: CategoryGroup[] = [
         href: "/stable-diffusion",
         middle: ["Realistic", "Anime", "Digital Art", "Photography", "3D Render", "Painting"],
         right: ["Portraits", "Landscapes", "Architecture", "Fantasy", "Sci-Fi", "Horror", "Cute", "Professional", "Artistic", "Commercial"]
+      },
+      {
+        id: "sora",
+        label: "Sora prompts",
+        icon: "sora",
+        href: "/sora",
+        middle: ["Cinematic", "Documentary", "Animation", "Product Demo", "Training", "Explainer"],
+        right: ["Corporate Videos", "Social Media", "Advertisements", "Educational Content", "Entertainment", "News Reports"]
       }
     ]
   }
@@ -79,6 +87,7 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
   const [selectedMiddle, setSelectedMiddle] = useState<string | null>(null);
   const [focusedPane, setFocusedPane] = useState<'left' | 'middle' | 'right'>('left');
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   
   // Mobile state
   const [mobileView, setMobileView] = useState<'main' | 'sub'>('main');
@@ -88,7 +97,7 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const leftRailRef = useRef<HTMLDivElement>(null);
 
-  // Initialize with first item
+  // Initialize with first item and load from localStorage
   useEffect(() => {
     if (categoriesData[0]?.children[0]) {
       const savedGroup = localStorage.getItem('ui.lastCategoryGroup');
@@ -119,13 +128,17 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
         case 'ArrowDown':
           e.preventDefault();
           if (focusedPane === 'left' && categoriesData[0]?.children) {
-            setFocusedIndex((prev) => Math.min(prev + 1, categoriesData[0].children.length - 1));
+            const nextIndex = Math.min(focusedIndex + 1, categoriesData[0].children.length - 1);
+            setFocusedIndex(nextIndex);
+            setSelectedLeft(categoriesData[0].children[nextIndex]);
           }
           break;
         case 'ArrowUp':
           e.preventDefault();
           if (focusedPane === 'left') {
-            setFocusedIndex((prev) => Math.max(prev - 1, 0));
+            const prevIndex = Math.max(focusedIndex - 1, 0);
+            setFocusedIndex(prevIndex);
+            setSelectedLeft(categoriesData[0].children[prevIndex]);
           }
           break;
         case 'ArrowRight':
@@ -150,7 +163,7 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
         case ' ':
           e.preventDefault();
           if (focusedPane === 'left' && categoriesData[0]?.children[focusedIndex]) {
-            setSelectedLeft(categoriesData[0].children[focusedIndex]);
+            handleItemClick(categoriesData[0].children[focusedIndex].href);
           }
           break;
       }
@@ -173,9 +186,40 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const handleLeftItemHover = (item: CategoryItem) => {
+  // Handle hover to open
+  const handleTriggerMouseEnter = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    const timeout = setTimeout(() => {
+      setIsOpen(true);
+    }, 150);
+    setHoverTimeout(timeout);
+  };
+
+  const handleTriggerMouseLeave = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+  };
+
+  const handlePanelMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsOpen(false);
+    }, 200);
+    setHoverTimeout(timeout);
+  };
+
+  const handlePanelMouseEnter = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+  };
+
+  const handleLeftItemHover = (item: CategoryItem, index: number) => {
     setSelectedLeft(item);
     setSelectedMiddle(null);
+    setFocusedIndex(index);
   };
 
   const handleMiddleItemHover = (item: string) => {
@@ -189,27 +233,28 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
     setIsOpen(false);
   };
 
-  // Desktop Mega Menu
+  // Desktop Mega Menu Panel
   const MegaMenuPanel = () => (
     <div
       ref={panelRef}
-      className="absolute top-full left-0 w-full mt-2 bg-slate-800 border border-white/8 rounded-2xl shadow-2xl z-50 min-h-96 max-h-[72vh] overflow-hidden"
+      className="fixed left-1/2 transform -translate-x-1/2 mt-2 border border-white/8 rounded-2xl z-50 min-h-96 max-h-[72vh] overflow-hidden transition-all duration-200 animate-in fade-in slide-in-from-top-2"
       style={{ 
         background: '#171C2D',
-        left: 'calc(-50vw + 50%)',
-        right: 'calc(-50vw + 50%)',
-        width: '100vw',
-        maxWidth: '1440px',
-        marginLeft: 'auto',
-        marginRight: 'auto'
+        width: 'min(1440px, calc(100vw - 32px))',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.35)'
       }}
       role="dialog"
       aria-label="Browse categories"
+      id="mega-categories"
+      onMouseEnter={handlePanelMouseEnter}
+      onMouseLeave={handlePanelMouseLeave}
     >
-      <div className="grid grid-cols-3 h-full p-4 gap-6">
+      <div className="grid grid-cols-3 h-full p-5 gap-0">
         {/* Left Rail */}
-        <div className="flex flex-col min-h-0">
-          <h3 className="text-sm uppercase tracking-wider text-slate-400 mb-4 font-medium">Categories</h3>
+        <div className="flex flex-col min-h-0 pr-4" style={{ width: '320px', flexShrink: 0 }}>
+          <h3 className="text-sm uppercase tracking-wider mb-4 font-medium" style={{ color: '#AEB5C9', letterSpacing: '0.06em' }}>
+            Categories
+          </h3>
           <div 
             ref={leftRailRef}
             className="flex-1 overflow-y-auto scrollbar-hide space-y-1"
@@ -217,38 +262,44 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
             {categoriesData[0]?.children.map((item, index) => (
               <button
                 key={item.id}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-all duration-150 ${
                   selectedLeft?.id === item.id 
-                    ? 'bg-slate-700 text-white' 
-                    : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    ? 'text-white' 
+                    : 'text-slate-300 hover:text-white'
                 } ${focusedPane === 'left' && focusedIndex === index ? 'ring-2 ring-blue-400' : ''}`}
-                onMouseEnter={() => handleLeftItemHover(item)}
+                style={{ 
+                  height: '48px',
+                  backgroundColor: selectedLeft?.id === item.id ? '#242C46' : 'transparent'
+                }}
+                onMouseEnter={() => handleLeftItemHover(item, index)}
                 onClick={() => handleItemClick(item.href)}
+                aria-current={selectedLeft?.id === item.id ? 'true' : undefined}
               >
-                <span className="font-medium">{item.label}</span>
-                <ChevronRight className="h-4 w-4 opacity-60" />
+                <span className="font-medium text-sm">{item.label}</span>
+                <ChevronRight className="h-4 w-4" style={{ opacity: 0.6 }} />
               </button>
             ))}
           </div>
         </div>
 
         {/* Vertical Divider */}
-        <div className="absolute left-1/3 top-4 bottom-4 w-px bg-white/6" />
+        <div className="absolute left-80 top-5 bottom-5 w-px bg-white/6" />
 
         {/* Middle List */}
-        <div className="flex flex-col min-h-0">
-          <h3 className="text-sm uppercase tracking-wider text-slate-400 mb-4 font-medium">
+        <div className="flex flex-col min-h-0 px-4">
+          <h3 className="text-sm uppercase tracking-wider mb-4 font-medium" style={{ color: '#AEB5C9', letterSpacing: '0.06em' }}>
             {selectedLeft ? `All ${selectedLeft.label}` : 'Subcategories'}
           </h3>
-          <div className="flex-1 overflow-y-auto scrollbar-hide space-y-2">
-            {selectedLeft?.middle?.map((item, index) => (
+          <div className="flex-1 overflow-y-auto scrollbar-hide space-y-1">
+            {selectedLeft?.middle?.map((item) => (
               <button
                 key={item}
-                className={`block w-full text-left px-3 py-2 rounded-md transition-colors ${
+                className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-150 text-sm ${
                   selectedMiddle === item 
                     ? 'text-white bg-slate-700/30' 
                     : 'text-slate-300 hover:text-white hover:bg-slate-700/20'
                 }`}
+                style={{ lineHeight: '34px' }}
                 onMouseEnter={() => handleMiddleItemHover(item)}
                 onClick={() => handleItemClick(`${selectedLeft.href}?filter=${encodeURIComponent(item)}`)}
               >
@@ -259,17 +310,20 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
         </div>
 
         {/* Vertical Divider */}
-        <div className="absolute left-2/3 top-4 bottom-4 w-px bg-white/6" />
+        <div className="absolute right-80 top-5 bottom-5 w-px bg-white/6" />
 
         {/* Right Grid */}
-        <div className="flex flex-col min-h-0">
-          <h3 className="text-sm uppercase tracking-wider text-slate-400 mb-4 font-medium">Popular Tags</h3>
+        <div className="flex flex-col min-h-0 pl-4">
+          <h3 className="text-sm uppercase tracking-wider mb-4 font-medium" style={{ color: '#AEB5C9', letterSpacing: '0.06em' }}>
+            Popular Tags
+          </h3>
           <div className="flex-1 overflow-y-auto scrollbar-hide">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
               {selectedLeft?.right?.map((tag) => (
                 <button
                   key={tag}
-                  className="text-sm text-slate-300 hover:text-white hover:underline text-left py-1 transition-colors"
+                  className="text-slate-300 hover:text-white hover:underline text-left py-1 transition-all duration-150 underline-offset-2"
+                  style={{ fontSize: '14px', fontWeight: 500 }}
                   onClick={() => handleItemClick(`${selectedLeft.href}?tag=${encodeURIComponent(tag)}`)}
                 >
                   {tag}
@@ -373,10 +427,15 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
           size="sm"
           className="gap-1 text-foreground hover:text-foreground"
           onClick={() => setIsOpen(!isOpen)}
+          onMouseEnter={handleTriggerMouseEnter}
+          onMouseLeave={handleTriggerMouseLeave}
           aria-expanded={isOpen}
           aria-controls="mega-categories"
+          role="button"
         >
-          Categories <ChevronDown className="h-4 w-4" />
+          <Grid3x3 className="h-4 w-4" />
+          Categories 
+          <ChevronDown className="h-4 w-4" />
         </Button>
 
         {isOpen && <MegaMenuPanel />}
@@ -387,7 +446,9 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="sm" className="gap-1">
-              Categories <ChevronDown className="h-4 w-4" />
+              <Grid3x3 className="h-4 w-4" />
+              Categories 
+              <ChevronDown className="h-4 w-4" />
             </Button>
           </SheetTrigger>
           <SheetContent 

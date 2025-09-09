@@ -305,23 +305,23 @@ const PromptShowcase = () => {
                   key={prompt.id} 
                   className="group flex-none w-72 sm:w-80 overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-lg snap-start cursor-pointer"
                   onMouseEnter={(e) => {
-                    if (!quickLook.isMobile) {
-                      quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                    if (!quickLook.isTouch) {
+                      quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData);
                     }
                   }}
                   onMouseLeave={() => {
-                    if (!quickLook.isMobile) {
-                      quickLook.hide();
+                    if (!quickLook.isTouch) {
+                      quickLook.leaveTrigger();
                     }
                   }}
                   onClick={(e) => {
-                    if (quickLook.isMobile) {
+                    if (quickLook.isTouch) {
                       e.preventDefault();
-                      quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                      quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData);
                     }
                   }}
-                  onFocus={(e) => quickLook.show(e.currentTarget as HTMLElement, quickLookData)}
-                  onBlur={() => quickLook.hide()}
+                  onFocus={(e) => quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData)}
+                  onBlur={() => quickLook.leaveTrigger()}
                   tabIndex={0}
                   role="button"
                   aria-label={`View ${prompt.title} - ${prompt.price}`}
@@ -454,23 +454,23 @@ const PromptShowcase = () => {
                         className="group trending-card bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10 cursor-pointer"
                         style={{ scrollSnapAlign: 'start' }}
                         onMouseEnter={(e) => {
-                          if (!quickLook.isMobile) {
-                            quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                          if (!quickLook.isTouch) {
+                            quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData);
                           }
                         }}
                         onMouseLeave={() => {
-                          if (!quickLook.isMobile) {
-                            quickLook.hide();
+                          if (!quickLook.isTouch) {
+                            quickLook.leaveTrigger();
                           }
                         }}
                         onClick={(e) => {
-                          if (quickLook.isMobile) {
+                          if (quickLook.isTouch) {
                             e.preventDefault();
-                            quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                            quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData);
                           }
                         }}
-                        onFocus={(e) => quickLook.show(e.currentTarget as HTMLElement, quickLookData)}
-                        onBlur={() => quickLook.hide()}
+                        onFocus={(e) => quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData)}
+                        onBlur={() => quickLook.leaveTrigger()}
                         tabIndex={0}
                         role="button"
                         aria-label={`View ${prompt.title} - ${prompt.price}`}
@@ -478,10 +478,10 @@ const PromptShowcase = () => {
                       <div className="flex items-center gap-3 p-3 h-20">
                         {/* Left: Thumbnail with Badge */}
                         <div className="relative flex-shrink-0">
-                          <img 
-                            src={prompt.image} 
-                            alt={prompt.title} 
-                            className="w-14 h-14 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300" 
+                          <img
+                            src={prompt.image}
+                            alt={prompt.title}
+                            className="w-14 h-14 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           {/* Ranking Badge */}
                           <div className="absolute -top-1 -left-1">
@@ -490,14 +490,14 @@ const PromptShowcase = () => {
                             </div>
                           </div>
                         </div>
-                        
+
                         {/* Right: Content */}
                         <div className="flex-1 min-w-0 space-y-1">
                           {/* Title */}
                           <h4 className="font-semibold text-base leading-tight line-clamp-2 group-hover:text-coral transition-colors">
                             {prompt.title}
                           </h4>
-                          
+
                           {/* Meta row: Platform + Rating */}
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <span className="text-sm">{prompt.category}</span>
@@ -506,12 +506,25 @@ const PromptShowcase = () => {
                               <span className="text-sm">{prompt.rating}</span>
                             </div>
                           </div>
-                          
+
                           {/* Price - separate line, muted */}
                           <div className="text-sm font-semibold text-muted-foreground/80">
                             {prompt.price}
                           </div>
                         </div>
+
+                        <Button
+                          variant="secondary"
+                          aria-haspopup="dialog"
+                          onMouseEnter={(e) => quickLook.showFromTrigger(e.currentTarget, quickLookData)}
+                          onMouseLeave={quickLook.leaveTrigger}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            quickLook.showFromTrigger(e.currentTarget as HTMLElement, quickLookData);
+                          }}
+                        >
+                          Preview
+                        </Button>
                       </div>
                     </Card>
                   );
@@ -532,10 +545,12 @@ const PromptShowcase = () => {
       {/* QuickLook Component */}
       <QuickLook
         isOpen={quickLook.isOpen}
-        onClose={() => quickLook.hide(true)}
         data={quickLook.data}
-        triggerElement={quickLook.triggerElement}
-        isMobile={quickLook.isMobile}
+        triggerEl={quickLook.triggerEl}
+        close={quickLook.close}
+        popupEnter={quickLook.popupEnter}
+        popupLeave={quickLook.popupLeave}
+        isTouch={quickLook.isTouch}
       />
     </div>;
 };

@@ -1,37 +1,15 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-
-interface QuickLookData {
-  id: string;
-  title: string;
-  coverImage: string;
-  price: string;
-  rating?: number;
-  modelTag: string;
-  slug: string;
-  smallThumb?: string;
-  isVideo?: boolean;
-  isSaved?: boolean;
-}
+import { useIsMobile } from "./use-mobile";
+import { QuickLookData } from "@/lib/types";
 
 export const useQuickLook = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<QuickLookData | null>(null);
   const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   
   const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Detect mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const show = useCallback((element: HTMLElement, quickLookData: QuickLookData) => {
     // Clear any pending hide timeout
@@ -110,5 +88,3 @@ export const useQuickLook = () => {
     cancelHide
   };
 };
-
-export default useQuickLook;

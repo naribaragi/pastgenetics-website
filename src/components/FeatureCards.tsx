@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 const discountDeals = [
   {
     tool: "Midjourney Plus",
@@ -59,11 +59,11 @@ const discountDeals = [
   }
 ];
 
-const FeatureCards = () => {
+const FeatureCards = memo(() => {
   const { toast } = useToast();
   const [copiedCoupon, setCopiedCoupon] = useState<string | null>(null);
 
-  const copyCoupon = async (coupon: string) => {
+  const copyCoupon = useCallback(async (coupon: string) => {
     try {
       await navigator.clipboard.writeText(coupon);
       setCopiedCoupon(coupon);
@@ -73,14 +73,14 @@ const FeatureCards = () => {
         duration: 2000,
       });
       setTimeout(() => setCopiedCoupon(null), 2000);
-    } catch (err) {
+    } catch (_err) {
       toast({
         title: "Copy failed",
         description: "Please copy the code manually",
         variant: "destructive",
       });
     }
-  };
+  }, [toast]);
 
   return (
     <div className="ai-discounts-section">
@@ -101,8 +101,8 @@ const FeatureCards = () => {
 
         {/* Discount Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {discountDeals.map((deal, index) => (
-            <Card key={index} className="group overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10">
+          {discountDeals.map((deal) => (
+            <Card key={deal.tool} className="group overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10">
               <div className="relative h-32 overflow-hidden">
                 <img 
                   src={deal.image} 
@@ -208,5 +208,6 @@ const FeatureCards = () => {
       <div className="w-full border-b border-border/30 mt-12"></div>
     </div>
   );
-};
+});
+
 export default FeatureCards;

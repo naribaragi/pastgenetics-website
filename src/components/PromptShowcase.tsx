@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Play, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import QuickLook from "@/components/QuickLook";
+import { QuickLook } from "@/components/QuickLook";
 import { useQuickLook } from "@/hooks/useQuickLook";
+import { cn } from "@/lib/utils";
 const featuredPrompts = [{
   id: 1,
   title: "Vintage Stipple Engraving Style",
@@ -381,19 +382,30 @@ const PromptShowcase = () => {
 
           <div className="relative">
             {/* Left Gradient Overlay */}
-            <div className={`trending-gradient-left ${currentPage === 0 ? 'opacity-15' : 'opacity-100'}`} />
-            
+            <div
+              className={cn(
+                "trending-gradient-left",
+                currentPage === 0 ? "opacity-15" : "opacity-100"
+              )}
+            />
+
             {/* Right Gradient Overlay */}
-            <div className={`trending-gradient-right ${currentPage >= totalPages - 1 ? 'opacity-15' : 'opacity-100'}`} />
+            <div
+              className={cn(
+                "trending-gradient-right",
+                currentPage >= totalPages - 1 ? "opacity-15" : "opacity-100"
+              )}
+            />
 
             {/* Left Arrow */}
             <Button
               onClick={handlePrevious}
               disabled={currentPage === 0}
               aria-label="Previous page"
-              className={`trending-arrow trending-arrow-left ${
-                isHovering ? 'trending-arrow-visible' : 'trending-arrow-hidden'
-              }`}
+              className={cn(
+                "trending-arrow trending-arrow-left",
+                isHovering ? "trending-arrow-visible" : "trending-arrow-hidden"
+              )}
               variant="ghost"
               size="icon"
             >
@@ -405,9 +417,10 @@ const PromptShowcase = () => {
               onClick={handleNext}
               disabled={currentPage >= totalPages - 1}
               aria-label="Next page"
-              className={`trending-arrow trending-arrow-right ${
-                isHovering ? 'trending-arrow-visible' : 'trending-arrow-hidden'
-              }`}
+              className={cn(
+                "trending-arrow trending-arrow-right",
+                isHovering ? "trending-arrow-visible" : "trending-arrow-hidden"
+              )}
               variant="ghost"
               size="icon"
             >

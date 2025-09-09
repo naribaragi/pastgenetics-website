@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import FeatureCards from "@/components/FeatureCards";
 import PromptShowcase from "@/components/PromptShowcase";
 import SellCTABanner from "@/components/SellCTABanner";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
         </div>
         <SellCTABanner />
       </main>
+      <Footer />
     </div>
   );
 };

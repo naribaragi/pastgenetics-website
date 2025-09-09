@@ -258,66 +258,53 @@ const PromptShowcase = () => {
           <TrendingUp className="w-6 h-6 text-coral" />
         </div>
 
-        <div className="space-y-4 max-h-[600px] overflow-hidden">
-          {Array.from({ length: Math.min(5, Math.ceil(trendingPrompts.length / 4)) }, (_, rowIndex) => {
-            const rowItems = trendingPrompts.slice(rowIndex * 4, (rowIndex + 1) * 4);
-            return (
-              <div key={rowIndex} className="relative">
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory">
-                  {rowItems.map((prompt, index) => (
-                    <Card key={`${rowIndex}-${index}`} className="group flex-none w-80 sm:w-96 overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10 snap-start">
-                      <div className="flex items-center gap-4 p-4 h-24">
-                        {/* Left: Thumbnail */}
-                        <div className="relative flex-shrink-0">
-                          <img 
-                            src={prompt.image} 
-                            alt={prompt.title} 
-                            className="w-16 h-16 rounded-lg object-cover group-hover:scale-110 transition-transform duration-300" 
-                          />
-                          {/* Ranking Badge */}
-                          <div className="absolute -top-2 -left-2">
-                            <div className="bg-coral text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg min-w-[24px] text-center">
-                              #{prompt.rank}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        {/* Right: Content */}
-                        <div className="flex-1 min-w-0 h-full flex flex-col justify-between">
-                          {/* Top: Title and Platform */}
-                          <div className="space-y-1">
-                            <h4 className="font-semibold text-sm leading-tight line-clamp-1 group-hover:text-coral transition-colors">
-                              {prompt.title}
-                            </h4>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
-                                {prompt.category}
-                              </span>
-                              <div className="flex items-center gap-1">
-                                <Star className="w-3 h-3 fill-star text-star" />
-                                <span className="text-xs text-muted-foreground">{prompt.rating}</span>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Bottom: Price */}
-                          <div className="flex justify-end">
-                            <span className="font-bold text-coral text-lg">
-                              {prompt.price}
-                            </span>
-                          </div>
+        <div className="trending-grid-container overflow-x-auto overflow-y-hidden px-2">
+          <div className="trending-grid">
+            {trendingPrompts
+              .sort((a, b) => a.rank - b.rank)
+              .map((prompt) => (
+                <Card key={prompt.rank} className="group trending-card bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10">
+                  <div className="flex items-center gap-3 p-3 h-20">
+                    {/* Left: Thumbnail with Badge */}
+                    <div className="relative flex-shrink-0">
+                      <img 
+                        src={prompt.image} 
+                        alt={prompt.title} 
+                        className="w-14 h-14 rounded-lg object-cover group-hover:scale-105 transition-transform duration-300" 
+                      />
+                      {/* Ranking Badge */}
+                      <div className="absolute -top-1 -left-1">
+                        <div className="bg-primary text-primary-foreground text-xs font-bold px-1.5 py-0.5 rounded-full shadow-md min-w-[20px] text-center leading-tight">
+                          #{prompt.rank}
                         </div>
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="text-center mt-8">
-          
+                    </div>
+                    
+                    {/* Right: Content */}
+                    <div className="flex-1 min-w-0 space-y-1">
+                      {/* Title */}
+                      <h4 className="font-semibold text-base leading-tight line-clamp-2 group-hover:text-coral transition-colors">
+                        {prompt.title}
+                      </h4>
+                      
+                      {/* Meta row: Platform + Rating */}
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <span className="text-sm">{prompt.category}</span>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-star text-star" />
+                          <span className="text-sm">{prompt.rating}</span>
+                        </div>
+                      </div>
+                      
+                      {/* Price - separate line, muted */}
+                      <div className="text-sm font-semibold text-muted-foreground/80">
+                        {prompt.price}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+          </div>
         </div>
       </section>
     </div>;

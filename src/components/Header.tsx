@@ -13,8 +13,9 @@ const Header = () => {
             <img 
               src="/lovable-uploads/09480dff-13c6-4546-8882-56167b51a23a.png" 
               alt="PastGenetics" 
-              className="h-8 w-auto"
+              className="h-10 w-auto"
             />
+            <span className="text-xl font-bold text-foreground">PastGenetics</span>
           </a>
 
           {/* Categories Mega Menu */}

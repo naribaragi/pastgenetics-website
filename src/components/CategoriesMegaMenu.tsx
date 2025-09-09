@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight, ChevronDown, X, ArrowLeft, Grid3x3 } from "lucide-react";
+import { ChevronRight, ChevronDown, ArrowLeft, Grid3x3, Palette, Image, Type, Briefcase, Camera, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -8,71 +8,102 @@ interface CategoryItem {
   label: string;
   icon?: string;
   href?: string;
-  middle?: string[];
-  right?: string[];
+  subcategories?: string[];
 }
 
-interface CategoryGroup {
+interface TopLevelCategory {
   id: string;
   label: string;
-  icon?: string;
-  children: CategoryItem[];
+  icon: React.ComponentType<any>;
+  items: CategoryItem[];
 }
 
-const categoriesData: CategoryGroup[] = [
+const categoriesData: TopLevelCategory[] = [
   {
     id: "models",
-    label: "All Models prompts",
-    icon: "models",
-    children: [
-      {
-        id: "chatgpt-image",
-        label: "ChatGPT Image prompts",
-        icon: "chatgpt-image",
-        href: "/chatgpt-image",
-        middle: ["Cartoon", "Celebrity", "Clothing", "Clip Art", "Cute", "Cyberpunk", "Drawing", "Drink", "Fantasy", "Fashion"],
-        right: ["Food", "Jewelry", "Landscape", "Logo", "Mockup", "Monogram", "Monster", "Nature", "Pattern", "Painting", "People", "Photographic", "Pixel Art", "Poster", "Product", "Psychedelic", "Retro", "Scary", "Space", "Steampunk", "Statue", "Sticker", "Unique Style", "Synthwave", "Texture", "Vehicle", "Wallpaper"]
-      },
-      {
-        id: "claude",
-        label: "Claude prompts",
-        icon: "claude",
-        href: "/claude",
-        middle: ["Business", "Creative", "Technical", "Academic", "Personal", "Research"],
-        right: ["Analysis", "Brainstorming", "Code Review", "Content Creation", "Data Processing", "Email Templates", "Marketing Copy", "Report Writing", "Strategy Planning", "Summarization"]
-      },
-      {
-        id: "dalle",
-        label: "DALL·E prompts",
-        icon: "dalle",
-        href: "/dalle",
-        middle: ["Abstract", "Artistic", "Realistic", "Cartoon", "Fantasy", "Portrait"],
-        right: ["Architecture", "Animals", "Characters", "Digital Art", "Fashion", "Food Photography", "Illustrations", "Landscapes", "Product Design", "Concept Art"]
-      },
-      {
-        id: "midjourney",
-        label: "Midjourney prompts",
-        icon: "midjourney",
-        href: "/midjourney",
-        middle: ["Photography", "Art Styles", "Characters", "Environments", "Products", "Abstract"],
-        right: ["Portrait Photography", "Landscape Art", "Character Design", "Architecture", "Product Mockups", "Digital Painting", "Concept Art", "Fashion Photography", "Still Life", "Surreal Art"]
-      },
-      {
-        id: "stable-diffusion",
-        label: "Stable Diffusion prompts",
-        icon: "stable-diffusion",
-        href: "/stable-diffusion",
-        middle: ["Realistic", "Anime", "Digital Art", "Photography", "3D Render", "Painting"],
-        right: ["Portraits", "Landscapes", "Architecture", "Fantasy", "Sci-Fi", "Horror", "Cute", "Professional", "Artistic", "Commercial"]
-      },
-      {
-        id: "sora",
-        label: "Sora prompts",
-        icon: "sora",
-        href: "/sora",
-        middle: ["Cinematic", "Documentary", "Animation", "Product Demo", "Training", "Explainer"],
-        right: ["Corporate Videos", "Social Media", "Advertisements", "Educational Content", "Entertainment", "News Reports"]
-      }
+    label: "Models",
+    icon: Grid3x3,
+    items: [
+      { id: "all-models", label: "All Models prompts", href: "/models" },
+      { id: "chatgpt", label: "ChatGPT prompts", href: "/chatgpt" },
+      { id: "claude", label: "Claude prompts", href: "/claude" },
+      { id: "dalle", label: "DALL·E prompts", href: "/dalle" },
+      { id: "midjourney", label: "Midjourney prompts", href: "/midjourney" },
+      { id: "stable-diffusion", label: "Stable Diffusion prompts", href: "/stable-diffusion" }
+    ]
+  },
+  {
+    id: "art",
+    label: "Art",
+    icon: Palette,
+    items: [
+      { id: "all-art", label: "All Art & Illustrations prompts", href: "/art" },
+      { id: "anime", label: "Anime prompts", href: "/art/anime" },
+      { id: "cartoon", label: "Cartoon prompts", href: "/art/cartoon" },
+      { id: "painting", label: "Painting prompts", href: "/art/painting" },
+      { id: "illustration", label: "Illustration prompts", href: "/art/illustration" },
+      { id: "unique-styles", label: "Unique Styles prompts", href: "/art/unique-styles" }
+    ]
+  },
+  {
+    id: "logos",
+    label: "Logos",
+    icon: Type,
+    items: [
+      { id: "all-logos", label: "All Logo prompts", href: "/logos" },
+      { id: "business", label: "Business logos", href: "/logos/business" },
+      { id: "tech", label: "Tech logos", href: "/logos/tech" },
+      { id: "creative", label: "Creative logos", href: "/logos/creative" }
+    ]
+  },
+  {
+    id: "graphics",
+    label: "Graphics",
+    icon: Image,
+    items: [
+      { id: "all-graphics", label: "All Graphics prompts", href: "/graphics" },
+      { id: "web-design", label: "Web Design prompts", href: "/graphics/web-design" },
+      { id: "print", label: "Print Design prompts", href: "/graphics/print" }
+    ]
+  },
+  {
+    id: "productivity",
+    label: "Productivity",
+    icon: Briefcase,
+    items: [
+      { id: "all-productivity", label: "All Productivity prompts", href: "/productivity" },
+      { id: "writing", label: "Writing prompts", href: "/productivity/writing" },
+      { id: "business", label: "Business prompts", href: "/productivity/business" }
+    ]
+  },
+  {
+    id: "marketing",
+    label: "Marketing",
+    icon: Briefcase,
+    items: [
+      { id: "all-marketing", label: "All Marketing prompts", href: "/marketing" },
+      { id: "social-media", label: "Social Media prompts", href: "/marketing/social-media" },
+      { id: "advertising", label: "Advertising prompts", href: "/marketing/advertising" }
+    ]
+  },
+  {
+    id: "photography",
+    label: "Photography",
+    icon: Camera,
+    items: [
+      { id: "all-photography", label: "All Photography prompts", href: "/photography" },
+      { id: "portrait", label: "Portrait prompts", href: "/photography/portrait" },
+      { id: "landscape", label: "Landscape prompts", href: "/photography/landscape" }
+    ]
+  },
+  {
+    id: "games",
+    label: "Games",
+    icon: Gamepad2,
+    items: [
+      { id: "all-games", label: "All Games prompts", href: "/games" },
+      { id: "character", label: "Character Design prompts", href: "/games/character" },
+      { id: "environment", label: "Environment prompts", href: "/games/environment" }
     ]
   }
 ];
@@ -83,95 +114,15 @@ interface CategoriesMegaMenuProps {
 
 export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLeft, setSelectedLeft] = useState<CategoryItem | null>(null);
-  const [selectedMiddle, setSelectedMiddle] = useState<string | null>(null);
-  const [focusedPane, setFocusedPane] = useState<'left' | 'middle' | 'right'>('left');
-  const [focusedIndex, setFocusedIndex] = useState(0);
+  const [selectedTopCategory, setSelectedTopCategory] = useState<TopLevelCategory>(categoriesData[0]);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   
   // Mobile state
   const [mobileView, setMobileView] = useState<'main' | 'sub'>('main');
-  const [mobileSelected, setMobileSelected] = useState<CategoryItem | null>(null);
+  const [mobileSelected, setMobileSelected] = useState<TopLevelCategory | null>(null);
   
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const leftRailRef = useRef<HTMLDivElement>(null);
-
-  // Initialize with first item and load from localStorage
-  useEffect(() => {
-    if (categoriesData[0]?.children[0]) {
-      const savedGroup = localStorage.getItem('ui.lastCategoryGroup');
-      const initialItem = savedGroup 
-        ? categoriesData[0].children.find(item => item.id === savedGroup) || categoriesData[0].children[0]
-        : categoriesData[0].children[0];
-      setSelectedLeft(initialItem);
-    }
-  }, []);
-
-  // Save selection to localStorage
-  useEffect(() => {
-    if (selectedLeft) {
-      localStorage.setItem('ui.lastCategoryGroup', selectedLeft.id);
-    }
-  }, [selectedLeft]);
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-
-      switch (e.key) {
-        case 'Escape':
-          setIsOpen(false);
-          triggerRef.current?.focus();
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          if (focusedPane === 'left' && categoriesData[0]?.children) {
-            const nextIndex = Math.min(focusedIndex + 1, categoriesData[0].children.length - 1);
-            setFocusedIndex(nextIndex);
-            setSelectedLeft(categoriesData[0].children[nextIndex]);
-          }
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          if (focusedPane === 'left') {
-            const prevIndex = Math.max(focusedIndex - 1, 0);
-            setFocusedIndex(prevIndex);
-            setSelectedLeft(categoriesData[0].children[prevIndex]);
-          }
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          if (focusedPane === 'left') {
-            setFocusedPane('middle');
-            setFocusedIndex(0);
-          } else if (focusedPane === 'middle') {
-            setFocusedPane('right');
-            setFocusedIndex(0);
-          }
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          if (focusedPane === 'right') {
-            setFocusedPane('middle');
-          } else if (focusedPane === 'middle') {
-            setFocusedPane('left');
-          }
-          break;
-        case 'Enter':
-        case ' ':
-          e.preventDefault();
-          if (focusedPane === 'left' && categoriesData[0]?.children[focusedIndex]) {
-            handleItemClick(categoriesData[0].children[focusedIndex].href);
-          }
-          break;
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, focusedPane, focusedIndex]);
 
   // Handle outside click
   useEffect(() => {
@@ -184,6 +135,21 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+      
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
   // Handle hover to open
@@ -216,14 +182,8 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
     }
   };
 
-  const handleLeftItemHover = (item: CategoryItem, index: number) => {
-    setSelectedLeft(item);
-    setSelectedMiddle(null);
-    setFocusedIndex(index);
-  };
-
-  const handleMiddleItemHover = (item: string) => {
-    setSelectedMiddle(item);
+  const handleTopCategoryHover = (category: TopLevelCategory) => {
+    setSelectedTopCategory(category);
   };
 
   const handleItemClick = (href?: string) => {
@@ -237,11 +197,12 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
   const MegaMenuPanel = () => (
     <div
       ref={panelRef}
-      className="fixed left-1/2 transform -translate-x-1/2 mt-2 border border-white/8 rounded-2xl z-50 min-h-96 max-h-[72vh] overflow-hidden transition-all duration-200 animate-in fade-in slide-in-from-top-2"
+      className="fixed left-1/2 transform -translate-x-1/2 mt-2 border border-white/8 rounded-2xl z-50 overflow-hidden transition-all duration-200 animate-in fade-in slide-in-from-top-2"
       style={{ 
         background: '#171C2D',
-        width: 'min(1440px, calc(100vw - 32px))',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.35)'
+        width: 'min(1200px, calc(100vw - 32px))',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.35)',
+        height: '500px'
       }}
       role="dialog"
       aria-label="Browse categories"
@@ -249,87 +210,51 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
       onMouseEnter={handlePanelMouseEnter}
       onMouseLeave={handlePanelMouseLeave}
     >
-      <div className="grid grid-cols-3 h-full p-5 gap-0">
-        {/* Left Rail */}
-        <div className="flex flex-col min-h-0 pr-4" style={{ width: '320px', flexShrink: 0 }}>
-          <h3 className="text-sm uppercase tracking-wider mb-4 font-medium" style={{ color: '#AEB5C9', letterSpacing: '0.06em' }}>
-            Categories
-          </h3>
-          <div 
-            ref={leftRailRef}
-            className="flex-1 overflow-y-auto scrollbar-hide space-y-1"
-          >
-            {categoriesData[0]?.children.map((item, index) => (
+      {/* Top Category Row */}
+      <div className="border-b border-white/6 p-4">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+          {categoriesData.map((category) => {
+            const IconComponent = category.icon;
+            return (
+              <button
+                key={category.id}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-150 ${
+                  selectedTopCategory.id === category.id
+                    ? 'bg-white/10 text-white'
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                }`}
+                onMouseEnter={() => handleTopCategoryHover(category)}
+              >
+                <IconComponent className="h-4 w-4" />
+                <span className="text-sm font-medium">{category.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Content Area */}
+      <div className="flex h-full">
+        {/* Left Sidebar */}
+        <div className="w-80 border-r border-white/6 p-4">
+          <div className="space-y-1">
+            {selectedTopCategory.items.map((item) => (
               <button
                 key={item.id}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-all duration-150 ${
-                  selectedLeft?.id === item.id 
-                    ? 'text-white' 
-                    : 'text-slate-300 hover:text-white'
-                } ${focusedPane === 'left' && focusedIndex === index ? 'ring-2 ring-blue-400' : ''}`}
-                style={{ 
-                  height: '48px',
-                  backgroundColor: selectedLeft?.id === item.id ? '#242C46' : 'transparent'
-                }}
-                onMouseEnter={() => handleLeftItemHover(item, index)}
+                className="w-full flex items-center justify-between px-4 py-3 text-left text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-150"
                 onClick={() => handleItemClick(item.href)}
-                aria-current={selectedLeft?.id === item.id ? 'true' : undefined}
               >
-                <span className="font-medium text-sm">{item.label}</span>
-                <ChevronRight className="h-4 w-4" style={{ opacity: 0.6 }} />
+                <span className="text-sm font-medium">{item.label}</span>
+                <ChevronRight className="h-4 w-4 opacity-60" />
               </button>
             ))}
           </div>
         </div>
 
-        {/* Vertical Divider */}
-        <div className="absolute left-80 top-5 bottom-5 w-px bg-white/6" />
-
-        {/* Middle List */}
-        <div className="flex flex-col min-h-0 px-4">
-          <h3 className="text-sm uppercase tracking-wider mb-4 font-medium" style={{ color: '#AEB5C9', letterSpacing: '0.06em' }}>
-            {selectedLeft ? `All ${selectedLeft.label}` : 'Subcategories'}
-          </h3>
-          <div className="flex-1 overflow-y-auto scrollbar-hide space-y-1">
-            {selectedLeft?.middle?.map((item) => (
-              <button
-                key={item}
-                className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-150 text-sm ${
-                  selectedMiddle === item 
-                    ? 'text-white bg-slate-700/30' 
-                    : 'text-slate-300 hover:text-white hover:bg-slate-700/20'
-                }`}
-                style={{ lineHeight: '34px' }}
-                onMouseEnter={() => handleMiddleItemHover(item)}
-                onClick={() => handleItemClick(`${selectedLeft.href}?filter=${encodeURIComponent(item)}`)}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Vertical Divider */}
-        <div className="absolute right-80 top-5 bottom-5 w-px bg-white/6" />
-
-        {/* Right Grid */}
-        <div className="flex flex-col min-h-0 pl-4">
-          <h3 className="text-sm uppercase tracking-wider mb-4 font-medium" style={{ color: '#AEB5C9', letterSpacing: '0.06em' }}>
-            Popular Tags
-          </h3>
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-              {selectedLeft?.right?.map((tag) => (
-                <button
-                  key={tag}
-                  className="text-slate-300 hover:text-white hover:underline text-left py-1 transition-all duration-150 underline-offset-2"
-                  style={{ fontSize: '14px', fontWeight: 500 }}
-                  onClick={() => handleItemClick(`${selectedLeft.href}?tag=${encodeURIComponent(tag)}`)}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
+        {/* Right Content Area */}
+        <div className="flex-1 p-4">
+          <div className="text-slate-400 text-sm">
+            Select a category from the left to see more options
           </div>
         </div>
       </div>
@@ -360,57 +285,38 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
       <div className="flex-1 overflow-y-auto py-4">
         {mobileView === 'main' ? (
           <div className="space-y-2">
-            {categoriesData[0]?.children.map((item) => (
-              <button
-                key={item.id}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-700/50 rounded-lg transition-colors"
-                onClick={() => {
-                  setMobileSelected(item);
-                  setMobileView('sub');
-                }}
-              >
-                <span className="font-medium text-white">{item.label}</span>
-                <ChevronRight className="h-5 w-5 text-slate-400" />
-              </button>
-            ))}
+            {categoriesData.map((category) => {
+              const IconComponent = category.icon;
+              return (
+                <button
+                  key={category.id}
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-700/50 rounded-lg transition-colors"
+                  onClick={() => {
+                    setMobileSelected(category);
+                    setMobileView('sub');
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <IconComponent className="h-5 w-5 text-slate-400" />
+                    <span className="font-medium text-white">{category.label}</span>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-slate-400" />
+                </button>
+              );
+            })}
           </div>
         ) : (
-          <div className="space-y-6">
-            {/* Middle items */}
-            {mobileSelected?.middle && mobileSelected.middle.length > 0 && (
-              <div>
-                <h3 className="text-sm uppercase tracking-wider text-slate-400 mb-3 font-medium">Subcategories</h3>
-                <div className="space-y-2">
-                  {mobileSelected.middle.map((item) => (
-                    <button
-                      key={item}
-                      className="block w-full text-left p-3 text-slate-300 hover:text-white hover:bg-slate-700/30 rounded-md transition-colors"
-                      onClick={() => handleItemClick(`${mobileSelected.href}?filter=${encodeURIComponent(item)}`)}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Right grid as list on mobile */}
-            {mobileSelected?.right && mobileSelected.right.length > 0 && (
-              <div>
-                <h3 className="text-sm uppercase tracking-wider text-slate-400 mb-3 font-medium">Popular Tags</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {mobileSelected.right.map((tag) => (
-                    <button
-                      key={tag}
-                      className="text-sm text-slate-300 hover:text-white hover:underline text-left p-2 transition-colors"
-                      onClick={() => handleItemClick(`${mobileSelected.href}?tag=${encodeURIComponent(tag)}`)}
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="space-y-2">
+            {mobileSelected?.items.map((item) => (
+              <button
+                key={item.id}
+                className="w-full flex items-center justify-between p-3 text-left hover:bg-slate-700/30 rounded-md transition-colors"
+                onClick={() => handleItemClick(item.href)}
+              >
+                <span className="text-white">{item.label}</span>
+                <ChevronRight className="h-4 w-4 text-slate-400" />
+              </button>
+            ))}
           </div>
         )}
       </div>

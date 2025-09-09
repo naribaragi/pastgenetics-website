@@ -1,90 +1,50 @@
-import { useState, useCallback, useRef, useEffect } from "react";
-import { useIsMobile } from "./use-mobile";
+import { useState, useCallback, useEffect } from "react";
 import { QuickLookData } from "@/lib/types";
+import { useHoverIntent } from "./useHoverIntent";
 
-export const useQuickLook = () => {
+export function useQuickLook() {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState<QuickLookData | null>(null);
-  const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(null);
-  const isMobile = useIsMobile();
-  
-  const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [triggerEl, setTriggerEl] = useState<HTMLElement | null>(null);
+  const hover = useHoverIntent();
+  const isTouch = typeof window !== "undefined" && (("ontouchstart" in window) || navigator.maxTouchPoints > 0);
 
-  const show = useCallback((element: HTMLElement, quickLookData: QuickLookData) => {
-    // Clear any pending hide timeout
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
+  const open = useCallback(() => setIsOpen(true), []);
 
-    // If already showing same item, don't restart
-    if (isOpen && data?.id === quickLookData.id) return;
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setData(null);
+    setTriggerEl(null);
+  }, []);
 
+  const showFromTrigger = useCallback((el: HTMLElement, quickLookData: QuickLookData) => {
     setData(quickLookData);
-    setTriggerElement(element);
-
-    if (isMobile) {
-      // Mobile: show immediately
-      setIsOpen(true);
+    setTriggerEl(el);
+    if (isTouch) {
+      open();
     } else {
-      // Desktop: show after brief delay
-      if (showTimeoutRef.current) {
-        clearTimeout(showTimeoutRef.current);
-      }
-      
-      showTimeoutRef.current = setTimeout(() => {
-        setIsOpen(true);
-      }, 200);
+      hover.onTriggerEnter(open);
     }
-  }, [isOpen, data, isMobile]);
+  }, [isTouch, hover, open]);
 
-  const hide = useCallback((immediate = false) => {
-    if (showTimeoutRef.current) {
-      clearTimeout(showTimeoutRef.current);
-      showTimeoutRef.current = null;
-    }
+  const leaveTrigger = useCallback(() => {
+    if (isTouch) return;
+    hover.onTriggerLeave(close);
+  }, [isTouch, hover, close]);
 
-    if (immediate || isMobile) {
-      setIsOpen(false);
-      setData(null);
-      setTriggerElement(null);
-    } else {
-      // Desktop: small delay to allow moving cursor to popup
-      hideTimeoutRef.current = setTimeout(() => {
-        setIsOpen(false);
-        setData(null);
-        setTriggerElement(null);
-      }, 100);
-    }
-  }, [isMobile]);
+  const popupEnter = useCallback(() => {
+    if (isTouch) return;
+    hover.onPopupEnter();
+  }, [isTouch, hover]);
 
-  const cancelHide = useCallback(() => {
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
-  }, []);
+  const popupLeave = useCallback(() => {
+    if (isTouch) return;
+    hover.onPopupLeave(close);
+  }, [isTouch, hover, close]);
 
-  // Cleanup timeouts
   useEffect(() => {
-    return () => {
-      if (showTimeoutRef.current) {
-        clearTimeout(showTimeoutRef.current);
-      }
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-      }
-    };
-  }, []);
+    return () => hover.clear();
+  }, [hover]);
 
-  return {
-    isOpen,
-    data,
-    triggerElement,
-    isMobile,
-    show,
-    hide,
-    cancelHide
-  };
-};
+  return { showFromTrigger, leaveTrigger, popupEnter, popupLeave, close, isOpen, data, triggerEl, isTouch };
+}

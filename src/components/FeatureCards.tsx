@@ -27,6 +27,35 @@ const features = [{
   color: "from-purple-500/20 to-pink-500/20"
 }];
 const FeatureCards = () => {
-  return;
+  return (
+    <div className="container px-4 max-w-screen-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {features.map((feature, index) => {
+          const Icon = feature.icon;
+          return (
+            <Card key={index} className="group overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105">
+              <div className={`relative h-32 bg-gradient-to-br ${feature.color}`}>
+                <img 
+                  src={feature.image} 
+                  alt={feature.title}
+                  className="w-full h-full object-cover mix-blend-overlay"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Icon className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{feature.description}</p>
+                <Button variant="outline" size="sm" className="w-full">
+                  Learn More
+                </Button>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 export default FeatureCards;

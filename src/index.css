@@ -158,6 +158,16 @@
     to { transform: translateY(0); }
   }
 
+  /* QuickLook animations - respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-in,
+    .fade-in,
+    .slide-in-from-top-2 {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
   /* Hide scrollbars for horizontal carousel */
   .scrollbar-hide {
     -ms-overflow-style: none;

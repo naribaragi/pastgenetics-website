@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Play, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import QuickLook from "@/components/QuickLook";
+import { useQuickLook } from "@/hooks/useQuickLook";
 const featuredPrompts = [{
   id: 1,
   title: "Vintage Stipple Engraving Style",
@@ -212,6 +214,7 @@ const PromptShowcase = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [columnsPerPage, setColumnsPerPage] = useState(3);
+  const quickLook = useQuickLook();
 
   // Calculate responsive columns per page
   useEffect(() => {
@@ -283,8 +286,45 @@ const PromptShowcase = () => {
         
         <div className="relative">
           <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory">
-            {featuredPrompts.map(prompt => (
-              <Card key={prompt.id} className="group flex-none w-72 sm:w-80 overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-lg snap-start">
+            {featuredPrompts.map((prompt) => {
+              const quickLookData = {
+                id: prompt.id.toString(),
+                title: prompt.title,
+                coverImage: prompt.image,
+                price: prompt.price,
+                rating: prompt.rating,
+                modelTag: prompt.category,
+                slug: `/prompt/${prompt.id}`,
+                smallThumb: prompt.image,
+                isVideo: prompt.isVideo
+              };
+
+              return (
+                <Card 
+                  key={prompt.id} 
+                  className="group flex-none w-72 sm:w-80 overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-lg snap-start cursor-pointer"
+                  onMouseEnter={(e) => {
+                    if (!quickLook.isMobile) {
+                      quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (!quickLook.isMobile) {
+                      quickLook.hide();
+                    }
+                  }}
+                  onClick={(e) => {
+                    if (quickLook.isMobile) {
+                      e.preventDefault();
+                      quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                    }
+                  }}
+                  onFocus={(e) => quickLook.show(e.currentTarget as HTMLElement, quickLookData)}
+                  onBlur={() => quickLook.hide()}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`View ${prompt.title} - ${prompt.price}`}
+                >
                 <div className="relative">
                   <img src={prompt.image} alt={prompt.title} className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300" />
                   {prompt.isVideo && (
@@ -313,7 +353,8 @@ const PromptShowcase = () => {
                   </div>
                 </div>
               </Card>
-            ))}
+            )
+            })}
           </div>
         </div>
       </section>
@@ -382,12 +423,45 @@ const PromptShowcase = () => {
               <div className="trending-carousel-grid">
                 {trendingPrompts
                   .sort((a, b) => a.rank - b.rank)
-                  .map((prompt) => (
-                    <Card 
-                      key={prompt.rank} 
-                      className="group trending-card bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10"
-                      style={{ scrollSnapAlign: 'start' }}
-                    >
+                  .map((prompt) => {
+                    const quickLookData = {
+                      id: prompt.rank.toString(),
+                      title: prompt.title,
+                      coverImage: prompt.image,
+                      price: prompt.price,
+                      rating: prompt.rating,
+                      modelTag: prompt.category,
+                      slug: `/prompt/${prompt.rank}`,
+                      smallThumb: prompt.image
+                    };
+
+                    return (
+                      <Card 
+                        key={prompt.rank} 
+                        className="group trending-card bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10 cursor-pointer"
+                        style={{ scrollSnapAlign: 'start' }}
+                        onMouseEnter={(e) => {
+                          if (!quickLook.isMobile) {
+                            quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          if (!quickLook.isMobile) {
+                            quickLook.hide();
+                          }
+                        }}
+                        onClick={(e) => {
+                          if (quickLook.isMobile) {
+                            e.preventDefault();
+                            quickLook.show(e.currentTarget as HTMLElement, quickLookData);
+                          }
+                        }}
+                        onFocus={(e) => quickLook.show(e.currentTarget as HTMLElement, quickLookData)}
+                        onBlur={() => quickLook.hide()}
+                        tabIndex={0}
+                        role="button"
+                        aria-label={`View ${prompt.title} - ${prompt.price}`}
+                      >
                       <div className="flex items-center gap-3 p-3 h-20">
                         {/* Left: Thumbnail with Badge */}
                         <div className="relative flex-shrink-0">
@@ -427,7 +501,8 @@ const PromptShowcase = () => {
                         </div>
                       </div>
                     </Card>
-                  ))}
+                  );
+                  })}
               </div>
             </div>
 
@@ -440,6 +515,15 @@ const PromptShowcase = () => {
           </div>
         </section>
       </div>
+
+      {/* QuickLook Component */}
+      <QuickLook
+        isOpen={quickLook.isOpen}
+        onClose={() => quickLook.hide(true)}
+        data={quickLook.data}
+        triggerElement={quickLook.triggerElement}
+        isMobile={quickLook.isMobile}
+      />
     </div>;
 };
 export default PromptShowcase;

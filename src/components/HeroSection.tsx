@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
 import heroImage from "@/assets/hero-ai-showcase.jpg";
 const HeroSection = () => {
   return <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">

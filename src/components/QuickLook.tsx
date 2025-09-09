@@ -1,20 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { X, Heart, ExternalLink, Play, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-
-interface QuickLookData {
-  id: string;
-  title: string;
-  coverImage: string;
-  price: string;
-  rating?: number;
-  modelTag: string;
-  slug: string;
-  smallThumb?: string;
-  isVideo?: boolean;
-  isSaved?: boolean;
-}
+import { QuickLookData } from "@/lib/types";
 
 interface QuickLookProps {
   isOpen: boolean;
@@ -90,23 +78,23 @@ export const QuickLook = ({ isOpen, onClose, data, triggerElement, isMobile = fa
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  const handleSaveToggle = () => {
-    setIsSaved(!isSaved);
+  const handleSaveToggle = useCallback(() => {
+    setIsSaved((prev) => !prev);
     // TODO: Wire to actual favorites system
-  };
+  }, []);
 
-  const handleExternalLink = () => {
+  const handleExternalLink = useCallback(() => {
     if (data?.slug) {
-      window.open(data.slug, '_blank', 'noopener,noreferrer');
+      window.open(data.slug, "_blank", "noopener,noreferrer");
     }
-  };
+  }, [data?.slug]);
 
-  const handleCTAClick = () => {
+  const handleCTAClick = useCallback(() => {
     if (data?.slug) {
       window.location.href = data.slug;
     }
     onClose();
-  };
+  }, [data?.slug, onClose]);
 
 
   if (!data) return null;
@@ -310,4 +298,3 @@ export const QuickLook = ({ isOpen, onClose, data, triggerElement, isMobile = fa
   );
 };
 
-export default QuickLook;

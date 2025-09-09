@@ -197,12 +197,12 @@ export const CategoriesMegaMenu = ({ className }: CategoriesMegaMenuProps) => {
   const MegaMenuPanel = () => (
     <div
       ref={panelRef}
-      className="fixed left-1/2 transform -translate-x-1/2 mt-2 border border-white/8 rounded-2xl z-50 overflow-hidden transition-all duration-200 animate-in fade-in slide-in-from-top-2"
+      className="fixed left-0 right-0 mt-2 border border-white/8 rounded-2xl z-50 overflow-hidden transition-all duration-200 animate-in fade-in slide-in-from-top-2 mx-4"
       style={{ 
         background: '#171C2D',
-        width: 'min(1200px, calc(100vw - 32px))',
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.35)',
-        height: '500px'
+        height: '500px',
+        maxWidth: 'none'
       }}
       role="dialog"
       aria-label="Browse categories"

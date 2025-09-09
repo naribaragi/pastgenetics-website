@@ -19,7 +19,7 @@ export const useQuickLook = () => {
   const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Detect mobile
@@ -47,24 +47,24 @@ export const useQuickLook = () => {
     setTriggerElement(element);
 
     if (isMobile) {
-      // Mobile: show immediately on tap
+      // Mobile: show immediately
       setIsOpen(true);
     } else {
-      // Desktop: show after hover delay
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
+      // Desktop: show after brief delay
+      if (showTimeoutRef.current) {
+        clearTimeout(showTimeoutRef.current);
       }
       
-      hoverTimeoutRef.current = setTimeout(() => {
+      showTimeoutRef.current = setTimeout(() => {
         setIsOpen(true);
       }, 200);
     }
   }, [isOpen, data, isMobile]);
 
   const hide = useCallback((immediate = false) => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
+    if (showTimeoutRef.current) {
+      clearTimeout(showTimeoutRef.current);
+      showTimeoutRef.current = null;
     }
 
     if (immediate || isMobile) {
@@ -72,12 +72,12 @@ export const useQuickLook = () => {
       setData(null);
       setTriggerElement(null);
     } else {
-      // Desktop: delay before hiding to allow moving to popup
+      // Desktop: small delay to allow moving cursor to popup
       hideTimeoutRef.current = setTimeout(() => {
         setIsOpen(false);
         setData(null);
         setTriggerElement(null);
-      }, 150);
+      }, 100);
     }
   }, [isMobile]);
 
@@ -91,8 +91,8 @@ export const useQuickLook = () => {
   // Cleanup timeouts
   useEffect(() => {
     return () => {
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
+      if (showTimeoutRef.current) {
+        clearTimeout(showTimeoutRef.current);
       }
       if (hideTimeoutRef.current) {
         clearTimeout(hideTimeoutRef.current);

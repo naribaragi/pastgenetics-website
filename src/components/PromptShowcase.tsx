@@ -258,48 +258,49 @@ const PromptShowcase = () => {
           <TrendingUp className="w-6 h-6 text-coral" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
           {trendingPrompts.map((prompt, index) => (
-            <Card key={index} className="group overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-coral/20 relative">
-              {/* Ranking Badge */}
-              <div className="absolute top-3 left-3 z-10">
-                <div className="bg-coral text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
-                  #{prompt.rank}
-                </div>
-              </div>
-              
-              {/* Thumbnail Image */}
-              <div className="relative aspect-square overflow-hidden">
-                <img 
-                  src={prompt.image} 
-                  alt={prompt.title} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
-                />
-              </div>
-              
-              {/* Card Content */}
-              <div className="p-4 space-y-3">
-                {/* Title */}
-                <h4 className="font-semibold text-sm leading-tight line-clamp-2 group-hover:text-coral transition-colors">
-                  {prompt.title}
-                </h4>
-                
-                {/* Platform/Model and Rating */}
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-full">
-                    {prompt.category}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-star text-star" />
-                    <span className="text-xs text-muted-foreground">{prompt.rating}</span>
+            <Card key={index} className="group overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-coral/10">
+              <div className="flex items-center gap-4 p-4 h-24">
+                {/* Left: Thumbnail */}
+                <div className="relative flex-shrink-0">
+                  <img 
+                    src={prompt.image} 
+                    alt={prompt.title} 
+                    className="w-16 h-16 rounded-lg object-cover group-hover:scale-110 transition-transform duration-300" 
+                  />
+                  {/* Ranking Badge */}
+                  <div className="absolute -top-2 -left-2">
+                    <div className="bg-coral text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg min-w-[24px] text-center">
+                      #{prompt.rank}
+                    </div>
                   </div>
                 </div>
                 
-                {/* Price */}
-                <div className="flex justify-end">
-                  <span className="font-bold text-coral text-lg">
-                    {prompt.price}
-                  </span>
+                {/* Right: Content */}
+                <div className="flex-1 min-w-0 h-full flex flex-col justify-between">
+                  {/* Top: Title and Platform */}
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-sm leading-tight line-clamp-1 group-hover:text-coral transition-colors">
+                      {prompt.title}
+                    </h4>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full">
+                        {prompt.category}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-star text-star" />
+                        <span className="text-xs text-muted-foreground">{prompt.rating}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Bottom: Price */}
+                  <div className="flex justify-end">
+                    <span className="font-bold text-coral text-lg">
+                      {prompt.price}
+                    </span>
+                  </div>
                 </div>
               </div>
             </Card>

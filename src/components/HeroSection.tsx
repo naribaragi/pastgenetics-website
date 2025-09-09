@@ -1,17 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import heroImage from "@/assets/hero-ai-showcase.jpg";
-
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+  return <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
-        <img 
-          src={heroImage} 
-          alt="AI-generated artwork showcase" 
-          className="w-full h-full object-cover"
-        />
+        <img src={heroImage} alt="AI-generated artwork showcase" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/80 to-background/60" />
       </div>
 
@@ -46,23 +40,7 @@ const HeroSection = () => {
         </div>
 
         {/* Social Proof */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm">
-          <div className="flex items-center gap-2">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-star text-star" />
-              ))}
-            </div>
-            <span className="text-muted-foreground">22,000+ five star reviews</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full bg-success flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white" />
-            </div>
-            <span className="text-muted-foreground">Trusted by 350,000+ users</span>
-          </div>
-        </div>
+        
 
         {/* Media Mentions */}
         <div className="mt-8 opacity-60">
@@ -76,8 +54,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;

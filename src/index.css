@@ -110,3 +110,14 @@
     color: hsl(var(--star-gold));
   }
 }
+
+@layer utilities {
+  /* Hide scrollbars for horizontal carousel */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

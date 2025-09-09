@@ -214,34 +214,40 @@ const PromptShowcase = () => {
           <Star className="w-6 h-6 text-coral" />
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {featuredPrompts.map(prompt => <Card key={prompt.id} className="group overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <div className="relative">
-                <img src={prompt.image} alt={prompt.title} className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
-                {prompt.isVideo && <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                    <div className="p-3 rounded-full bg-white/20 backdrop-blur-sm">
-                      <Play className="w-6 h-6 text-white fill-white" />
+        <div className="relative">
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 snap-x snap-mandatory">
+            {featuredPrompts.map(prompt => (
+              <Card key={prompt.id} className="group flex-none w-72 sm:w-80 overflow-hidden bg-card/50 hover:bg-card/80 border-border/50 transition-all duration-300 hover:scale-105 hover:shadow-lg snap-start">
+                <div className="relative">
+                  <img src={prompt.image} alt={prompt.title} className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-300" />
+                  {prompt.isVideo && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <div className="p-2 rounded-full bg-white/20 backdrop-blur-sm">
+                        <Play className="w-4 h-4 text-white fill-white" />
+                      </div>
                     </div>
-                  </div>}
-                <Badge className="absolute top-2 left-2 text-xs" variant={prompt.isVideo ? "default" : "secondary"}>
-                  {prompt.category}
-                </Badge>
-              </div>
-              
-              <div className="p-4">
-                <h3 className="font-semibold text-sm mb-2 line-clamp-2 group-hover:text-coral transition-colors">
-                  {prompt.title}
-                </h3>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-star text-star" />
-                    <span className="text-xs text-muted-foreground">{prompt.rating}</span>
-                  </div>
-                  <span className="font-bold text-coral">{prompt.price}</span>
+                  )}
+                  <Badge className="absolute top-2 left-2 text-xs" variant={prompt.isVideo ? "default" : "secondary"}>
+                    {prompt.category}
+                  </Badge>
                 </div>
-              </div>
-            </Card>)}
+                
+                <div className="p-3">
+                  <h3 className="font-medium text-sm mb-2 line-clamp-1 group-hover:text-coral transition-colors">
+                    {prompt.title}
+                  </h3>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-3 h-3 fill-star text-star" />
+                      <span className="text-xs text-muted-foreground">{prompt.rating}</span>
+                    </div>
+                    <span className="font-bold text-coral text-sm">{prompt.price}</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 

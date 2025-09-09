@@ -392,7 +392,32 @@
     }
   }
 
-  /* New Footer Styles */
+  /* AI Discounts Section */
+  .ai-discounts-section {
+    margin: 4rem 0;
+  }
+
+  .ai-discounts-section .text-coral {
+    color: hsl(var(--coral-primary));
+  }
+
+  .ai-discounts-section .bg-coral-primary {
+    background: hsl(var(--coral-primary));
+  }
+
+  .ai-discounts-section .hover\\:bg-coral-hover:hover {
+    background: hsl(var(--coral-hover));
+  }
+
+  .ai-discounts-section .text-success-green {
+    color: hsl(var(--success-green));
+  }
+
+  @media (max-width: 767px) {
+    .ai-discounts-section {
+      margin: 2rem 0;
+    }
+  }
   .new-footer-wrapper {
     background: #121624;
     border-top: 1px solid rgba(255, 255, 255, 0.06);

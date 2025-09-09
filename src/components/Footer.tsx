@@ -1,286 +1,130 @@
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 const Footer = () => {
-  const [expandedSections, setExpandedSections] = useState<string[]>(['brand']);
-  const [emailSubscribed, setEmailSubscribed] = useState(false);
-  const [email, setEmail] = useState('');
-
-  const toggleSection = (section: string) => {
-    setExpandedSections(prev => 
-      prev.includes(section) 
-        ? prev.filter(s => s !== section)
-        : [...prev, section]
-    );
-  };
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email && email.includes('@')) {
-      setEmailSubscribed(true);
-      setTimeout(() => {
-        setEmailSubscribed(false);
-        setEmail('');
-      }, 3000);
-    }
-  };
-
-  const FooterSection = ({ 
-    id, 
-    title, 
-    children, 
-    isExpanded 
-  }: { 
-    id: string; 
-    title: string; 
-    children: React.ReactNode; 
-    isExpanded: boolean; 
-  }) => (
-    <div className="footer-column">
-      <button
-        className="footer-section-toggle md:hidden w-full flex justify-between items-center py-3 text-left focus:outline-none focus:ring-2 focus:ring-[#6CA8FF] rounded"
-        onClick={() => toggleSection(id)}
-        aria-expanded={isExpanded}
-      >
-        <h3 className="footer-heading text-[#E7EAF2] uppercase text-sm font-semibold tracking-wide">
-          {title}
-        </h3>
-        {isExpanded ? (
-          <ChevronUp className="w-4 h-4 text-[#C9CFDC]" />
-        ) : (
-          <ChevronDown className="w-4 h-4 text-[#C9CFDC]" />
-        )}
-      </button>
-      
-      <h3 className="footer-heading hidden md:block text-[#E7EAF2] uppercase text-sm font-semibold tracking-wide mb-3">
-        {title}
-      </h3>
-      
-      <div className={`footer-section-content ${isExpanded ? 'expanded' : 'collapsed'}`}>
-        {children}
-      </div>
-    </div>
-  );
-
   return (
-    <footer id="site-footer" role="contentinfo" className="footer-wrapper">
-      <div className="footer-separator" />
-      
-      <div className="footer-container">
-        {/* Tier A: Simplified Footer */}
-        <div className="footer-mega">
-          <div className="footer-grid-simplified">
-            {/* Column 1: Brand + Newsletter + Social */}
-            <FooterSection 
-              id="brand" 
-              title="PromptBase" 
-              isExpanded={expandedSections.includes('brand')}
-            >
-              <div className="space-y-5">
-                <p className="text-[#C9CFDC] text-sm leading-relaxed">
-                  The world's largest marketplace for AI prompts. Create, sell, and discover high-quality prompts for all major AI models.
-                </p>
-                
-                {/* Newsletter */}
-                <div>
-                  <h4 className="text-[#E7EAF2] text-sm font-semibold mb-2">Stay Updated</h4>
-                  {!emailSubscribed ? (
-                    <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-                      <Input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="flex-1 bg-background/50 border-border/50 text-sm rounded-lg"
-                        required
-                      />
-                      <Button 
-                        type="submit"
-                        size="sm"
-                        className="bg-coral text-background hover:bg-coral/90 rounded-lg px-4"
-                      >
-                        Subscribe
-                      </Button>
-                    </form>
-                  ) : (
-                    <div className="text-coral text-sm font-medium">
-                      Thanks—check your inbox!
-                    </div>
-                  )}
-                </div>
-                
-                {/* Social Icons */}
-                <div>
-                  <h4 className="text-[#E7EAF2] text-sm font-semibold mb-3">Follow Us</h4>
-                  <div className="flex gap-3">
-                    {[
-                      { name: 'Discord', href: '#', icon: '💬' },
-                      { name: 'X/Twitter', href: '#', icon: '𝕏' },
-                      { name: 'Instagram', href: '#', icon: '📷' },
-                      { name: 'YouTube', href: '#', icon: '📺' },
-                      { name: 'Reddit', href: '#', icon: '🔴' },
-                      { name: 'Threads', href: '#', icon: '@' }
-                    ].map((social) => (
-                      <a
-                        key={social.name}
-                        href={social.href}
-                        aria-label={`Follow us on ${social.name}`}
-                        className="footer-social-icon"
-                        data-track={`footer_social_${social.name.toLowerCase()}`}
-                      >
-                        <span className="text-lg">{social.icon}</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </FooterSection>
-
-            {/* Column 2: Company */}
-            <FooterSection 
-              id="company" 
-              title="Company" 
-              isExpanded={expandedSections.includes('company')}
-            >
-              <nav aria-label="Company links">
-                <ul className="footer-links">
-                  {[
-                    { text: 'About', href: '/about', track: 'footer_company_about' },
-                    { text: 'Contact', href: '/contact', track: 'footer_company_contact' },
-                    { text: 'Careers', href: '/careers', track: 'footer_company_careers' },
-                    { text: 'Press Kit', href: '/press', track: 'footer_company_press' },
-                    { text: 'Partners', href: '/partners', track: 'footer_company_partners' },
-                    { text: 'Affiliates', href: '/affiliates', track: 'footer_company_affiliates' }
-                  ].map((link) => (
-                    <li key={link.track}>
-                      <a 
-                        href={link.href} 
-                        className="footer-link"
-                        data-track={link.track}
-                      >
-                        {link.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </FooterSection>
-
-            {/* Column 3: Resources & Browse */}
-            <FooterSection 
-              id="resources" 
-              title="Resources" 
-              isExpanded={expandedSections.includes('resources')}
-            >
-              <nav aria-label="Resource links">
-                <ul className="footer-links">
-                  {[
-                    { text: 'FAQ & Help', href: '/faq', track: 'footer_resources_faq' },
-                    { text: 'Blog', href: '/blog', track: 'footer_resources_blog' },
-                    { text: 'Seller Guide', href: '/seller-guide', track: 'footer_resources_seller_guide' },
-                    { text: 'Quality Guidelines', href: '/guidelines', track: 'footer_resources_guidelines' },
-                    { text: 'API Docs', href: '/api', track: 'footer_resources_api' },
-                    { text: 'Changelog', href: '/changelog', track: 'footer_resources_changelog' },
-                    { text: 'Leaderboard', href: '/leaderboard', track: 'footer_resources_leaderboard' }
-                  ].map((link) => (
-                    <li key={link.track}>
-                      <a 
-                        href={link.href} 
-                        className="footer-link"
-                        data-track={link.track}
-                      >
-                        {link.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </FooterSection>
-
-            {/* Column 4: Browse (Simplified Categories) */}
-            <FooterSection 
-              id="browse" 
-              title="Browse" 
-              isExpanded={expandedSections.includes('browse')}
-            >
-              <nav aria-label="Browse prompts">
-                <ul className="footer-links">
-                  {[
-                    { text: 'Image Prompts', href: '/image-prompts', track: 'footer_browse_image' },
-                    { text: 'Text Prompts', href: '/text-prompts', track: 'footer_browse_text' },
-                    { text: 'Video Prompts', href: '/video-prompts', track: 'footer_browse_video' },
-                    { text: 'Free Prompts', href: '/free', track: 'footer_browse_free' },
-                    { text: 'Trending', href: '/trending', track: 'footer_browse_trending' },
-                    { text: 'Popular Models', href: '/models', track: 'footer_browse_models' }
-                  ].map((link) => (
-                    <li key={link.track}>
-                      <a 
-                        href={link.href} 
-                        className="footer-link"
-                        data-track={link.track}
-                      >
-                        {link.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </FooterSection>
+    <footer id="site-footer" role="contentinfo" className="new-footer-wrapper">
+      <div className="new-footer-container">
+        {/* Tier 1: Centered Rows */}
+        <div className="new-footer-tier-1">
+          {/* Copyright */}
+          <div className="new-footer-copyright">
+            © PromptBase 2025
+          </div>
+          
+          {/* Utility Nav */}
+          <nav aria-label="Footer utility links" className="new-footer-utility-nav">
+            {[
+              { text: 'FAQ', href: '/faq' },
+              { text: 'Contact', href: '/contact' },
+              { text: 'Changelog', href: '/changelog' },
+              { text: 'Blog', href: '/blog' },
+              { text: 'Privacy', href: '/privacy' },
+              { text: 'Terms', href: '/terms' },
+              { text: 'Leaderboard', href: '/leaderboard' },
+              { text: 'Affiliates', href: '/affiliates' }
+            ].map((link, index, array) => (
+              <span key={link.text}>
+                <a 
+                  href={link.href} 
+                  className="new-footer-utility-link"
+                  data-track={`footer_utility_${link.text.toLowerCase()}`}
+                >
+                  {link.text}
+                </a>
+                {index < array.length - 1 && <span className="new-footer-separator"> • </span>}
+              </span>
+            ))}
+          </nav>
+          
+          {/* Social Icons */}
+          <div className="new-footer-social-row">
+            {[
+              { name: 'Instagram', href: '#', icon: '📷' },
+              { name: 'Threads', href: '#', icon: '@' },
+              { name: 'X/Twitter', href: '#', icon: '𝕏' },
+              { name: 'Reddit', href: '#', icon: '🔴' },
+              { name: 'Discord', href: '#', icon: '💬' }
+            ].map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                aria-label={`Follow us on ${social.name}`}
+                className="new-footer-social-icon"
+                data-track={`footer_social_${social.name.toLowerCase()}`}
+              >
+                <span>{social.icon}</span>
+              </a>
+            ))}
           </div>
         </div>
 
-        {/* Tier B: Bottom Bar */}
-        <div className="footer-bottom">
-          <div className="footer-bottom-content">
-            <div className="footer-copyright">
-              © PromptBase 2025
-            </div>
-            
-            <nav aria-label="Footer utility links" className="footer-utility-nav">
-              {[
-                { text: 'FAQ', href: '/faq' },
-                { text: 'Contact', href: '/contact' },
-                { text: 'Blog', href: '/blog' },
-                { text: 'Privacy', href: '/privacy' },
-                { text: 'Terms', href: '/terms' },
-                { text: 'Changelog', href: '/changelog' },
-                { text: 'Leaderboard', href: '/leaderboard' },
-                { text: 'Affiliates', href: '/affiliates' }
-              ].map((link, index, array) => (
-                <span key={link.text}>
-                  <a 
-                    href={link.href} 
-                    className="footer-utility-link"
-                    data-track={`footer_utility_${link.text.toLowerCase()}`}
-                  >
-                    {link.text}
-                  </a>
-                  {index < array.length - 1 && <span className="footer-separator"> • </span>}
-                </span>
-              ))}
+        {/* Divider */}
+        <div className="new-footer-divider" />
+
+        {/* Tier 2: Two Link Columns */}
+        <div className="new-footer-tier-2">
+          {/* Categories Column */}
+          <div className="new-footer-column">
+            <h3 className="new-footer-column-title">CATEGORIES</h3>
+            <nav aria-label="Categories">
+              <ul className="new-footer-column-links">
+                {[
+                  { text: 'Best AI prompts', href: '/best' },
+                  { text: 'Art & Illustration prompts', href: '/art-illustration' },
+                  { text: 'Logo & Icon prompts', href: '/logo-icon' },
+                  { text: 'Graphic & Design prompts', href: '/graphic-design' },
+                  { text: 'Productivity & Writing prompts', href: '/productivity-writing' },
+                  { text: 'Marketing & Business prompts', href: '/marketing-business' },
+                  { text: 'Photography prompts', href: '/photography' },
+                  { text: 'Games & 3D prompts', href: '/games-3d' },
+                  { text: 'Sitemap', href: '/sitemap' }
+                ].map((link) => (
+                  <li key={link.text}>
+                    <a href={link.href} className="new-footer-column-link">
+                      {link.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </nav>
-            
-            <div className="footer-social-compact">
-              {[
-                { name: 'X/Twitter', href: '#', icon: '𝕏' },
-                { name: 'Instagram', href: '#', icon: '📷' },
-                { name: 'YouTube', href: '#', icon: '📺' },
-                { name: 'GitHub', href: '#', icon: '⚡' },
-                { name: 'Discord', href: '#', icon: '💬' }
-              ].map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  aria-label={`Follow us on ${social.name}`}
-                  className="footer-social-compact-icon"
-                  data-track={`footer_bottom_social_${social.name.toLowerCase()}`}
-                >
-                  <span className="text-sm">{social.icon}</span>
-                </a>
-              ))}
-            </div>
+          </div>
+
+          {/* Models Column */}
+          <div className="new-footer-column">
+            <h3 className="new-footer-column-title">MODELS</h3>
+            <nav aria-label="AI Models">
+              <ul className="new-footer-column-links">
+                {[
+                  { text: 'Image prompts', href: '/image-prompts' },
+                  { text: 'Text prompts', href: '/text-prompts' },
+                  { text: 'Video prompts', href: '/video-prompts' },
+                  { text: 'Free prompts', href: '/free-prompts' },
+                  { text: 'Midjourney prompts', href: '/midjourney' },
+                  { text: 'Sora prompts', href: '/sora' },
+                  { text: 'FLUX prompts', href: '/flux' },
+                  { text: 'DALL·E prompts', href: '/dalle' },
+                  { text: 'ChatGPT Image prompts', href: '/chatgpt-image' },
+                  { text: 'Gemini Image prompts', href: '/gemini-image' },
+                  { text: 'KLING AI prompts', href: '/kling-ai' },
+                  { text: 'Hailuo AI prompts', href: '/hailuo-ai' },
+                  { text: 'Google Imagen prompts', href: '/google-imagen' },
+                  { text: 'Stable Diffusion prompts', href: '/stable-diffusion' },
+                  { text: 'DeepSeek prompts', href: '/deepseek' },
+                  { text: 'ChatGPT prompts', href: '/chatgpt' },
+                  { text: 'Leonardo Ai prompts', href: '/leonardo-ai' },
+                  { text: 'Llama prompts', href: '/llama' },
+                  { text: 'Claude prompts', href: '/claude' },
+                  { text: 'Ideogram prompts', href: '/ideogram' },
+                  { text: 'Gemini prompts', href: '/gemini' },
+                  { text: 'Grok prompts', href: '/grok' },
+                  { text: 'Grok Image prompts', href: '/grok-image' }
+                ].map((link) => (
+                  <li key={link.text}>
+                    <a href={link.href} className="new-footer-column-link">
+                      {link.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

@@ -69,64 +69,71 @@ const Footer = () => {
       <div className="footer-separator" />
       
       <div className="footer-container">
-        {/* Tier A: Mega Footer */}
+        {/* Tier A: Simplified Footer */}
         <div className="footer-mega">
-          <div className="footer-grid">
-            {/* Column 1: Brand */}
+          <div className="footer-grid-simplified">
+            {/* Column 1: Brand + Newsletter + Social */}
             <FooterSection 
               id="brand" 
               title="PromptBase" 
               isExpanded={expandedSections.includes('brand')}
             >
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <p className="text-[#C9CFDC] text-sm leading-relaxed">
                   The world's largest marketplace for AI prompts. Create, sell, and discover high-quality prompts for all major AI models.
                 </p>
                 
                 {/* Newsletter */}
-                {!emailSubscribed ? (
-                  <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
-                    <Input
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="flex-1 bg-background/50 border-border/50 text-sm"
-                      required
-                    />
-                    <Button 
-                      type="submit"
-                      size="sm"
-                      className="bg-coral text-background hover:bg-coral/90"
-                    >
-                      Subscribe
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="text-coral text-sm font-medium">
-                    Thanks—check your inbox!
-                  </div>
-                )}
+                <div>
+                  <h4 className="text-[#E7EAF2] text-sm font-semibold mb-2">Stay Updated</h4>
+                  {!emailSubscribed ? (
+                    <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="flex-1 bg-background/50 border-border/50 text-sm rounded-lg"
+                        required
+                      />
+                      <Button 
+                        type="submit"
+                        size="sm"
+                        className="bg-coral text-background hover:bg-coral/90 rounded-lg px-4"
+                      >
+                        Subscribe
+                      </Button>
+                    </form>
+                  ) : (
+                    <div className="text-coral text-sm font-medium">
+                      Thanks—check your inbox!
+                    </div>
+                  )}
+                </div>
                 
                 {/* Social Icons */}
-                <div className="flex gap-3">
-                  {[
-                    { name: 'X/Twitter', href: '#', icon: '𝕏' },
-                    { name: 'Instagram', href: '#', icon: '📷' },
-                    { name: 'YouTube', href: '#', icon: '📺' },
-                    { name: 'GitHub', href: '#', icon: '⚡' },
-                    { name: 'Discord', href: '#', icon: '💬' }
-                  ].map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      aria-label={`Follow us on ${social.name}`}
-                      className="footer-social-icon"
-                      data-track={`footer_social_${social.name.toLowerCase()}`}
-                    >
-                      <span className="text-lg">{social.icon}</span>
-                    </a>
-                  ))}
+                <div>
+                  <h4 className="text-[#E7EAF2] text-sm font-semibold mb-3">Follow Us</h4>
+                  <div className="flex gap-3">
+                    {[
+                      { name: 'Discord', href: '#', icon: '💬' },
+                      { name: 'X/Twitter', href: '#', icon: '𝕏' },
+                      { name: 'Instagram', href: '#', icon: '📷' },
+                      { name: 'YouTube', href: '#', icon: '📺' },
+                      { name: 'Reddit', href: '#', icon: '🔴' },
+                      { name: 'Threads', href: '#', icon: '@' }
+                    ].map((social) => (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        aria-label={`Follow us on ${social.name}`}
+                        className="footer-social-icon"
+                        data-track={`footer_social_${social.name.toLowerCase()}`}
+                      >
+                        <span className="text-lg">{social.icon}</span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </FooterSection>
@@ -145,8 +152,7 @@ const Footer = () => {
                     { text: 'Careers', href: '/careers', track: 'footer_company_careers' },
                     { text: 'Press Kit', href: '/press', track: 'footer_company_press' },
                     { text: 'Partners', href: '/partners', track: 'footer_company_partners' },
-                    { text: 'Changelog', href: '/changelog', track: 'footer_company_changelog' },
-                    { text: 'Leaderboard', href: '/leaderboard', track: 'footer_company_leaderboard' }
+                    { text: 'Affiliates', href: '/affiliates', track: 'footer_company_affiliates' }
                   ].map((link) => (
                     <li key={link.track}>
                       <a 
@@ -162,7 +168,7 @@ const Footer = () => {
               </nav>
             </FooterSection>
 
-            {/* Column 3: Resources */}
+            {/* Column 3: Resources & Browse */}
             <FooterSection 
               id="resources" 
               title="Resources" 
@@ -171,13 +177,13 @@ const Footer = () => {
               <nav aria-label="Resource links">
                 <ul className="footer-links">
                   {[
+                    { text: 'FAQ & Help', href: '/faq', track: 'footer_resources_faq' },
                     { text: 'Blog', href: '/blog', track: 'footer_resources_blog' },
-                    { text: 'FAQ / Help Center', href: '/faq', track: 'footer_resources_faq' },
                     { text: 'Seller Guide', href: '/seller-guide', track: 'footer_resources_seller_guide' },
-                    { text: 'Prompt Quality Guidelines', href: '/guidelines', track: 'footer_resources_guidelines' },
-                    { text: 'Pricing', href: '/pricing', track: 'footer_resources_pricing' },
-                    { text: 'API / Integrations', href: '/api', track: 'footer_resources_api' },
-                    { text: 'Sitemap', href: '/sitemap', track: 'footer_resources_sitemap' }
+                    { text: 'Quality Guidelines', href: '/guidelines', track: 'footer_resources_guidelines' },
+                    { text: 'API Docs', href: '/api', track: 'footer_resources_api' },
+                    { text: 'Changelog', href: '/changelog', track: 'footer_resources_changelog' },
+                    { text: 'Leaderboard', href: '/leaderboard', track: 'footer_resources_leaderboard' }
                   ].map((link) => (
                     <li key={link.track}>
                       <a 
@@ -193,23 +199,21 @@ const Footer = () => {
               </nav>
             </FooterSection>
 
-            {/* Column 4: Categories */}
+            {/* Column 4: Browse (Simplified Categories) */}
             <FooterSection 
-              id="categories" 
-              title="Categories" 
-              isExpanded={expandedSections.includes('categories')}
+              id="browse" 
+              title="Browse" 
+              isExpanded={expandedSections.includes('browse')}
             >
-              <nav aria-label="Category links">
+              <nav aria-label="Browse prompts">
                 <ul className="footer-links">
                   {[
-                    { text: 'Best AI prompts', href: '/best', track: 'footer_categories_best' },
-                    { text: 'Art & Illustration', href: '/art', track: 'footer_categories_art' },
-                    { text: 'Logo & Icons', href: '/logos', track: 'footer_categories_logos' },
-                    { text: 'Graphic & Design', href: '/design', track: 'footer_categories_design' },
-                    { text: 'Productivity & Writing', href: '/productivity', track: 'footer_categories_productivity' },
-                    { text: 'Marketing & Business', href: '/marketing', track: 'footer_categories_marketing' },
-                    { text: 'Photography', href: '/photography', track: 'footer_categories_photography' },
-                    { text: 'Games & 3D', href: '/games', track: 'footer_categories_games' }
+                    { text: 'Image Prompts', href: '/image-prompts', track: 'footer_browse_image' },
+                    { text: 'Text Prompts', href: '/text-prompts', track: 'footer_browse_text' },
+                    { text: 'Video Prompts', href: '/video-prompts', track: 'footer_browse_video' },
+                    { text: 'Free Prompts', href: '/free', track: 'footer_browse_free' },
+                    { text: 'Trending', href: '/trending', track: 'footer_browse_trending' },
+                    { text: 'Popular Models', href: '/models', track: 'footer_browse_models' }
                   ].map((link) => (
                     <li key={link.track}>
                       <a 
@@ -221,56 +225,6 @@ const Footer = () => {
                       </a>
                     </li>
                   ))}
-                  <li>
-                    <a 
-                      href="/categories" 
-                      className="footer-link footer-view-all"
-                      data-track="footer_categories_view_all"
-                    >
-                      View all →
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </FooterSection>
-
-            {/* Column 5: Models */}
-            <FooterSection 
-              id="models" 
-              title="Models" 
-              isExpanded={expandedSections.includes('models')}
-            >
-              <nav aria-label="Model links">
-                <ul className="footer-links">
-                  {[
-                    { text: 'Midjourney', href: '/midjourney', track: 'footer_models_midjourney' },
-                    { text: 'ChatGPT Image', href: '/chatgpt', track: 'footer_models_chatgpt' },
-                    { text: 'Sora', href: '/sora', track: 'footer_models_sora' },
-                    { text: 'DALL·E', href: '/dalle', track: 'footer_models_dalle' },
-                    { text: 'Gemini Image', href: '/gemini', track: 'footer_models_gemini' },
-                    { text: 'Stable Diffusion', href: '/stable-diffusion', track: 'footer_models_sd' },
-                    { text: 'Ideogram', href: '/ideogram', track: 'footer_models_ideogram' },
-                    { text: 'DeepSeek', href: '/deepseek', track: 'footer_models_deepseek' }
-                  ].map((link) => (
-                    <li key={link.track}>
-                      <a 
-                        href={link.href} 
-                        className="footer-link"
-                        data-track={link.track}
-                      >
-                        {link.text}
-                      </a>
-                    </li>
-                  ))}
-                  <li>
-                    <a 
-                      href="/models" 
-                      className="footer-link footer-view-all"
-                      data-track="footer_models_view_all"
-                    >
-                      View all →
-                    </a>
-                  </li>
                 </ul>
               </nav>
             </FooterSection>

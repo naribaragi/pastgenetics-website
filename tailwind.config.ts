@@ -47,6 +47,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // PromptBase custom colors
+        coral: {
+          DEFAULT: "hsl(var(--coral-primary))",
+          hover: "hsl(var(--coral-hover))",
+        },
+        star: "hsl(var(--star-gold))",
+        success: "hsl(var(--success-green))",
+        premium: "hsl(var(--premium-purple))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

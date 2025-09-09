@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* PromptBase AI Marketplace Design System - Dark Theme with Coral Accents */
+/* PastGenetics AI Marketplace Design System - Dark Theme with Gradient Accents */
 
 @layer base {
   :root {
@@ -42,7 +42,7 @@
 
     --radius: 0.75rem;
 
-    /* Custom PromptBase colors */
+    /* Custom PastGenetics colors */
     --hero-gradient-start: 222 25% 8%;
     --hero-gradient-end: 222 25% 12%;
     --coral-primary: 15 90% 65%;
@@ -51,6 +51,11 @@
     --star-gold: 45 100% 60%;
     --success-green: 142 76% 36%;
     --premium-purple: 260 80% 65%;
+
+    /* Modern gradient system */
+    --gradient-primary: linear-gradient(90deg, #FFB98A 0%, #FF6E7A 100%);
+    --gradient-primary-hover: linear-gradient(90deg, #FFB98A 0%, #FF6E7A 100%);
+    --gradient-secondary: linear-gradient(90deg, rgba(255, 185, 138, 0.1) 0%, rgba(255, 110, 122, 0.1) 100%);
 
     /* Sidebar colors for dark theme */
     --sidebar-background: 222 25% 10%;
@@ -112,6 +117,18 @@
 }
 
 @layer utilities {
+  /* Modern search button gradient */
+  .search-gradient-button {
+    background: linear-gradient(90deg, #FFB98A 0%, #FF6E7A 100%);
+  }
+
+  /* Container width improvements */
+  .container {
+    max-width: 1440px !important;
+    padding-left: clamp(16px, 3vw, 32px);
+    padding-right: clamp(16px, 3vw, 32px);
+  }
+
   /* Hide scrollbars for horizontal carousel */
   .scrollbar-hide {
     -ms-overflow-style: none;

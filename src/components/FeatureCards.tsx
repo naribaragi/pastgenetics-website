@@ -173,7 +173,8 @@ const FeatureCards = () => {
                 <div className="space-y-2">
                   <Button 
                     asChild
-                    className="w-full bg-coral-primary hover:bg-coral-hover text-white font-semibold"
+                    variant="primary"
+                    className="w-full font-semibold"
                     data-track={deal.track}
                   >
                     <a 

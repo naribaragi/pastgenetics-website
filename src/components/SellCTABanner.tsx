@@ -38,7 +38,7 @@ const SellCTABanner = () => {
                   id="sell-cta-title" 
                   className="sell-cta-headline text-[#F3F4F6] font-black mb-6"
                 >
-                  Sell your prompts on PromptBase
+                  Sell your prompts on PastGenetics
                 </h2>
                 
                 <p className="sell-cta-subtext text-[#C8CDD9] mb-8 leading-relaxed">

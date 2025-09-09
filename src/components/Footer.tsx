@@ -6,7 +6,7 @@ const Footer = () => {
         <div className="new-footer-tier-1">
           {/* Copyright */}
           <div className="new-footer-copyright">
-            © PromptBase 2025
+            © PastGenetics 2025
           </div>
           
           {/* Utility Nav */}

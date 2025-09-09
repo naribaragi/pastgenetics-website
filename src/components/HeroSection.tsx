@@ -31,10 +31,10 @@ const HeroSection = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Button size="lg" className="bg-coral hover:bg-coral-hover text-white px-8 py-6 text-lg font-semibold transition-smooth glow-coral">
+          <Button variant="primary" size="lg" className="px-8 py-6 text-lg font-semibold">
             Explore prompts
           </Button>
-          <Button size="lg" variant="outline" className="px-8 py-6 text-lg font-semibold border-coral text-coral hover:bg-coral hover:text-white transition-smooth">
+          <Button variant="outline" size="lg" className="px-8 py-6 text-lg font-semibold">
             Sell prompts
           </Button>
         </div>

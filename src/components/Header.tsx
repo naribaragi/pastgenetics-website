@@ -1,6 +1,6 @@
-import { Search, Menu, ChevronDown } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { CategoriesMegaMenu } from "@/components/CategoriesMegaMenu";
 
 const Header = () => {
   return (
@@ -17,23 +17,8 @@ const Header = () => {
             />
           </a>
 
-          {/* Categories - Desktop */}
-          <div className="hidden md:block">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1 text-foreground hover:text-foreground">
-                  Categories <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                <DropdownMenuItem>Midjourney</DropdownMenuItem>
-                <DropdownMenuItem>ChatGPT</DropdownMenuItem>
-                <DropdownMenuItem>DALL-E</DropdownMenuItem>
-                <DropdownMenuItem>Stable Diffusion</DropdownMenuItem>
-                <DropdownMenuItem>GPT-4</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {/* Categories Mega Menu */}
+          <CategoriesMegaMenu />
 
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex">

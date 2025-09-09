@@ -1,4 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  type ComponentType,
+  type SVGProps,
+} from "react";
 import { ChevronRight, ChevronDown, ArrowLeft, Grid3x3, Palette, Image, Type, Briefcase, Camera, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -14,7 +20,7 @@ interface CategoryItem {
 interface TopLevelCategory {
   id: string;
   label: string;
-  icon: React.ComponentType<any>;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
   items: CategoryItem[];
 }
 

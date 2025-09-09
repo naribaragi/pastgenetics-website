@@ -3,10 +3,18 @@ import { Button } from "@/components/ui/button";
 const SellCTABanner = () => {
   const handleSellClick = () => {
     // Optional analytics event
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'cta_sell_prompt_click', {
-        event_category: 'engagement',
-        event_label: 'sell_prompt_banner'
+    if (typeof window !== "undefined") {
+      const w = window as Window & {
+        gtag?: (
+          event: string,
+          action: string,
+          params: Record<string, string>,
+        ) => void;
+      };
+
+      w.gtag?.("event", "cta_sell_prompt_click", {
+        event_category: "engagement",
+        event_label: "sell_prompt_banner",
       });
     }
   };
